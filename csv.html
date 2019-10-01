@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Plano de Gestão</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- CSS do Bootstrap (CDN) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- CSS do Font Awesome (CDN)-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+
+<body style="background: url(img/background.jpg) no-repeat;">
+
+    <nav class="navbar navbar-dark" style="background: #0b451a;">
+        <a href="#" class="navbar-brand">
+            <img src="img/logo.png"  width=40 height=50>
+        </a>
+        <span class="navbar-brand mb-0 h1">UECE que queremos</span>
+    </nav>
+    
+    <div class='container' style="margin-top: 40px">
+        <div class='row'>
+            <div class='col'></div>
+            <div class='col'>
+                <div class='form-group'>
+                    <input type="submit" id="submit-form" class="btn btn-success" value="Gerar CSV">
+                </div>
+            </div>
+            <div class='col'></div>
+        </div>
+    </div>
+
+
+    
+
+    <!-- JS do jQuery + Popper.js + Bootstrap (CDN) -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+    <script type="text/javascript" async>
+
+        var btnSubmit = document.getElementById("submit-form");
+                btnSubmit.addEventListener('click', async function (){
+
+
+                    var response = await fetch("https://formiracema.firebaseio.com/respostas.json");
+                    respJson = await response.json()
+
+                    var array = await Object.entries(respJson).map(item => ({...item[1], key: item[0]}));
+                    var data = [];
+
+                    data.push(["eixo:", "diretriz:", "ação:", "nome:", "e-mail:"]);
+                    for (i in array) {
+                        var teste = [array[i].eixo, array[i].diretriz, array[i].acao, array[i].nome, array[i].email]
+                        data.push(teste);
+                    }
+
+
+                    // Building the CSV from the Data two-dimensional array
+                    // Each column is separated by ";" and new line "\n" for next row
+                    var csvContent = '';
+                    data.forEach(function(infoArray, index) {
+                    dataString = infoArray.join(';');
+                    csvContent += index < data.length ? dataString + '\n' : dataString;
+                    });
+
+                    // The download function takes a CSV string, the filename and mimeType as parameters
+                    // Scroll/look down at the bottom of this snippet to see how download is called
+                    var download = function(content, fileName, mimeType) {
+                    var a = document.createElement('a');
+                    mimeType = mimeType || 'application/octet-stream';
+
+                    if (navigator.msSaveBlob) { // IE10
+                        navigator.msSaveBlob(new Blob([content], {
+                        type: mimeType
+                        }), fileName);
+                    } else if (URL && 'download' in a) { //html5 A[download]
+                        a.href = URL.createObjectURL(new Blob([content], {
+                        type: mimeType
+                        }));
+                        a.setAttribute('download', fileName);
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    } else {
+                        location.href = 'data:application/octet-stream,' + encodeURIComponent(content); // only this mime type is supported
+                    }
+                    }
+
+                    download(csvContent, 'planoGestao.csv', 'text/csv;encoding:utf-8');
+                    
+                });
+
+	</script>
+
+
+</body>
+</html>

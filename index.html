@@ -12,11 +12,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 </head>
 
-<body background="css/background.jpg">
+<body style="background: url(img/background.jpg) no-repeat;">
 
-    <nav class="navbar navbar-light bg-light">
-         <img src="css/logo.png"  width=40 height=50>
-        <span class="navbar-brand mb-0 h1">Proposta para Plano de Gestão UECE-2020</span>
+    <nav class="navbar navbar-dark" style="background: #0b451a;">
+        <a href="#" class="navbar-brand">
+            <img src="img/logo.png"  width=40 height=50>
+        </a>
+        <span class="navbar-brand mb-0 h1">UECE que queremos</span>
     </nav>
     
     <div class='container' style="margin-top: 40px">
@@ -176,7 +178,7 @@
 		btnSubmit.addEventListener('click', function (){
 
 
-            if(document.getElementById("nome").value != '' && document.getElementById("email").value != '' && document.getElementById("eixo").value != '' && document.getElementById("acao").value != '' &&  document.getElementById("select-dir").value != -1){
+            if(document.getElementById("eixo").value != '' && document.getElementById("acao").value != '' &&  document.getElementById("select-dir").value != -1){
 
             btnSubmit.disabled = true;
             var diretriz = '';
@@ -230,7 +232,9 @@
 
             }else {
                 alert("Por Favor, preencha todos os campos"); 
+                
             }
+            
         });
 
 	</script>
